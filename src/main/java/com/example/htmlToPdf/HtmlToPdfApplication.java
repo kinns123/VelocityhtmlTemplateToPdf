@@ -1,7 +1,9 @@
 package com.example.htmlToPdf;
 
+import java.io.ByteArrayOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
+import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
 
@@ -12,13 +14,16 @@ import org.apache.velocity.runtime.RuntimeConstants;
 import org.apache.velocity.runtime.resource.loader.ClasspathResourceLoader;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
+import org.springframework.http.HttpEntity;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.MediaType;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
 
 import com.itextpdf.text.Document;
 import com.itextpdf.text.PageSize;
 import com.itextpdf.text.pdf.PdfWriter;
-import com.itextpdf.text.pdf.codec.Base64.OutputStream;
 import com.itextpdf.tool.xml.XMLWorkerHelper;
 
 @SpringBootApplication
@@ -29,8 +34,9 @@ public class HtmlToPdfApplication {
 		SpringApplication.run(HtmlToPdfApplication.class, args);
 	}
 
-	@GetMapping("/genpdf")
-	public String home() {
+	@GetMapping("/genpdf/{fileName}")
+	HttpEntity<byte[]> createPdf(
+            @PathVariable("fileName") String fileName) throws IOException {
 
 		/* first, get and initialize an engine */
 		VelocityEngine ve = new VelocityEngine();
@@ -49,18 +55,22 @@ public class HtmlToPdfApplication {
 		t.merge(context, writer);
 		/* show the World */
 		System.out.println(writer.toString());
+		
+		ByteArrayOutputStream baos = new ByteArrayOutputStream();
 
-		String path = generatePdf(writer.toString());
+		baos = generatePdf(writer.toString());
 
-		if (path != "") {
-			return path;
-		} else {
-			return "Error occured while generating PDF";
-		}
+		HttpHeaders header = new HttpHeaders();
+	    header.setContentType(MediaType.APPLICATION_PDF);
+	    header.set(HttpHeaders.CONTENT_DISPOSITION,
+	                   "attachment; filename=" + fileName.replace(" ", "_"));
+	    header.setContentLength(baos.toByteArray().length);
+
+	    return new HttpEntity<byte[]>(baos.toByteArray(), header);
 
 	}
 
-	public String generatePdf(String html) {
+	public ByteArrayOutputStream generatePdf(String html) {
 
 		String pdfFilePath = "";
 		PdfWriter pdfWriter = null;
@@ -82,6 +92,8 @@ public class HtmlToPdfApplication {
 					+ System.currentTimeMillis() + ".pdf";
 			FileOutputStream file = new FileOutputStream(new File(pdfFilePath));
 			pdfWriter = PdfWriter.getInstance(document, file);
+			ByteArrayOutputStream baos = new ByteArrayOutputStream();
+			PdfWriter.getInstance(document, baos);
 
 			// open document
 			document.open();
@@ -94,14 +106,15 @@ public class HtmlToPdfApplication {
 			document.close();
 			// close the writer
 			pdfWriter.close();
+			
+			
 
 			System.out.println("PDF generated successfully");
 
-			return "PDF generated successfully and saved at "
-					+ pdfFilePath.replace("/", "\\");
+			return baos;
 		} catch (Exception e) {
 			e.printStackTrace();
-			return pdfFilePath = "";
+			return null;
 		}
 
 	}
