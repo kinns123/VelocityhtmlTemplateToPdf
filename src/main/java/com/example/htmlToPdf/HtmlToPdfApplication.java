@@ -88,10 +88,6 @@ public class HtmlToPdfApplication {
 			document.addTitle("HTML to PDF using itext");
 			document.setPageSize(PageSize.LETTER);
 
-			pdfFilePath = "C:/Users/Kiran/Desktop/velocityToPdfGenerated/Test"
-					+ System.currentTimeMillis() + ".pdf";
-			FileOutputStream file = new FileOutputStream(new File(pdfFilePath));
-			pdfWriter = PdfWriter.getInstance(document, file);
 			ByteArrayOutputStream baos = new ByteArrayOutputStream();
 			PdfWriter.getInstance(document, baos);
 
@@ -104,11 +100,6 @@ public class HtmlToPdfApplication {
 					html));
 			// close the document
 			document.close();
-			// close the writer
-			pdfWriter.close();
-			
-			
-
 			System.out.println("PDF generated successfully");
 
 			return baos;
