@@ -2,5 +2,6 @@
 <html>
 <body>
 Hello <b>$name!</b>  Welcome to Velocity!
+<h1> Hello User</h1>
 </body>
 </html>
