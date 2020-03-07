@@ -14,8 +14,8 @@ EXPOSE 8000
 ARG JAR_FILE=target/htmlToPdf-0.0.1-SNAPSHOT.jar
 
 # Add the application's jar to the container
-ADD ${JAR_FILE} demo.jar
+ADD ${JAR_FILE} html-to-pdf-sb.jar
 
 # Run the jar file 
-ENTRYPOINT ["java","-jar","/demo.jar"]
+ENTRYPOINT ["java","-jar","/html-to-pdf-sb.jar"]
 
