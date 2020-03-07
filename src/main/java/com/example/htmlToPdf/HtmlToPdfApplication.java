@@ -81,7 +81,7 @@ public class HtmlToPdfApplication {
 
 			document = new Document();
 			// document header attributes
-			document.addAuthor("Kiran Dhongade");
+			document.addAuthor("Kinns");
 			document.addCreationDate();
 			document.addProducer();
 			document.addCreator("kinns123.github.io");
@@ -108,6 +108,11 @@ public class HtmlToPdfApplication {
 			return null;
 		}
 
+	}
+
+	@GetMapping("/msg")
+	public String printMesssage(){
+		return "this is the message";
 	}
 
 }
