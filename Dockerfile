@@ -39,8 +39,8 @@ FROM openjdk:8-jdk-alpine
 
 #maintainer 
 MAINTAINER kinnsdhongadi@gmail.com
-#expose port 8080
-EXPOSE 8080
+#expose port 8000
+EXPOSE 8000
 
 #default command
 CMD java -jar /data/htmlToPdf-0.0.1-SNAPSHOT.jar
