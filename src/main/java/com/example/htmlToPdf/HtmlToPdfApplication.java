@@ -82,6 +82,7 @@ public class HtmlToPdfApplication {
 			document = new Document();
 			// document header attributes
 			document.addAuthor("Kinns");
+			document.addAuthor("Kinns123");
 			document.addCreationDate();
 			document.addProducer();
 			document.addCreator("kinns123.github.io");
