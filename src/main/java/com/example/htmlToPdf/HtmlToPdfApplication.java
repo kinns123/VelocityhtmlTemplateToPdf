@@ -1,11 +1,10 @@
 package com.example.htmlToPdf;
 
 import java.io.ByteArrayOutputStream;
-import java.io.File;
-import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.StringReader;
 import java.io.StringWriter;
+import java.time.LocalDateTime;
 
 import org.apache.velocity.Template;
 import org.apache.velocity.VelocityContext;
@@ -50,6 +49,7 @@ public class HtmlToPdfApplication {
 		/* create a context and add data */
 		VelocityContext context = new VelocityContext();
 		context.put("name", "World");
+		context.put("genDateTime", LocalDateTime.now().toString());
 		/* now render the template into a StringWriter */
 		StringWriter writer = new StringWriter();
 		t.merge(context, writer);

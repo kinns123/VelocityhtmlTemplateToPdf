@@ -3,5 +3,8 @@
 <body>
 Hello <b>$name!</b>  Welcome to Velocity!
 <h1> Hello User</h1>
+<br/>
+<br/>
+This file is generated on : $genDateTime
 </body>
 </html>
